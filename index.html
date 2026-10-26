@@ -81,7 +81,10 @@ body::before {
 .death-step,
 .run-state,
 .recent-card,
-.challenge-box {
+.challenge-box,
+.arcana-card,
+.character-card,
+.mechanic-card {
   border-color: #76241f;
   background: linear-gradient(145deg, #381014e8, #150507f2 68%);
   box-shadow: 0 12px 28px #0009, inset 0 1px #ffb21a14;
@@ -171,6 +174,110 @@ body::before {
 .play-tools #wakeToggle { display: none; }
 .compact .nav.menu-grid { margin-top: 0; }
 
+.codex-filters {
+  display: flex;
+  gap: 7px;
+  margin: 10px 0 15px;
+  overflow-x: auto;
+}
+
+.codex-filter {
+  flex: 0 0 auto;
+  padding: 8px 12px;
+  border: 1px solid #76241f;
+  border-radius: 999px;
+  background: #2c090d;
+  color: var(--ink);
+  font-weight: 800;
+}
+
+.codex-filter.active {
+  border-color: #ff9c19;
+  background: linear-gradient(135deg, #bd1024, #7d0713);
+}
+
+.arcana-grid,
+.character-grid,
+.mechanics-grid {
+  display: grid;
+  gap: 12px;
+  margin-top: 15px;
+}
+
+.arcana-grid { grid-template-columns: repeat(auto-fit, minmax(330px, 1fr)); }
+.character-grid { grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); }
+
+.arcana-card,
+.character-card {
+  display: grid;
+  grid-template-columns: 112px 1fr;
+  gap: 14px;
+  padding: 14px;
+  border: 1px solid #76241f;
+  border-radius: 19px;
+}
+
+.arcana-art,
+.character-portrait {
+  align-self: start;
+  display: grid;
+  place-items: center;
+  min-height: 112px;
+  border-radius: 14px;
+  background: radial-gradient(circle, #9a1724, #170305 70%);
+}
+
+.arcana-art img {
+  width: 104px;
+  height: 142px;
+  object-fit: contain;
+  filter: drop-shadow(0 8px 10px #000a);
+}
+
+.character-portrait img {
+  width: 96px;
+  height: 112px;
+  object-fit: contain;
+  image-rendering: pixelated;
+  filter: drop-shadow(0 8px 8px #000b);
+}
+
+.arcana-card h3,
+.character-card h3 { margin: 7px 0 4px; font-size: 23px; }
+.arcana-card p,
+.character-card p { margin: 5px 0; color: #e0c8c1; font-size: 13px; line-height: 1.45; }
+.arcana-card small { display: block; margin: 7px 0; color: var(--muted); line-height: 1.4; }
+.arcana-card .learn,
+.character-card .learn { display: inline-block; margin-top: 6px; }
+.character-weapon { color: #ffc143 !important; font-weight: 900; }
+
+.mechanic-card {
+  border: 1px solid #76241f;
+  border-radius: 17px;
+  overflow: hidden;
+}
+
+.mechanic-card summary {
+  display: grid;
+  grid-template-columns: 38px 1fr 28px;
+  align-items: center;
+  gap: 8px;
+  padding: 14px;
+  cursor: pointer;
+  list-style: none;
+  font-family: "Grenze Gotisch", Georgia, serif;
+  font-size: 23px;
+}
+
+.mechanic-card summary::-webkit-details-marker { display: none; }
+.mechanic-icon { font-family: system-ui, sans-serif; font-size: 24px; }
+.mechanic-open { color: var(--gold); text-align: center; }
+.mechanic-card[open] .mechanic-open { transform: rotate(45deg); }
+.mechanic-card > div { padding: 0 16px 16px 60px; color: #e0c8c1; line-height: 1.55; }
+.mechanic-card p { margin-top: 0; }
+.dlc-hook { color: #ffe1b0 !important; font-size: 14px !important; }
+.dlc-recipes { padding-top: 10px; border-top: 1px solid #76241f66; }
+
 @media (max-width: 540px) {
   .cover-hero {
     max-height: none;
@@ -191,7 +298,18 @@ body::before {
     font-size: 18px;
   }
 
-  .nav.menu-grid button:last-child { grid-column: 1 / -1; }
+  .arcana-grid,
+  .character-grid { grid-template-columns: 1fr; }
+
+  .arcana-card,
+  .character-card { grid-template-columns: 82px 1fr; gap: 10px; padding: 11px; }
+  .arcana-art,
+  .character-portrait { min-height: 86px; }
+  .arcana-art img { width: 76px; height: 104px; }
+  .character-portrait img { width: 74px; height: 88px; }
+  .arcana-card h3,
+  .character-card h3 { font-size: 20px; }
+  .mechanic-card > div { padding-left: 14px; }
 }
 </style></head><body><main class="wrap">
 <header class="hero cover-hero" role="img" aria-label="Hentire Survivors plakát Henivel"></header>
@@ -214,6 +332,7 @@ body::before {
 </style><script>const W='https://vampire.survivors.wiki/w/';
 const slug=s=>encodeURIComponent(s.replaceAll(' ','_')).replaceAll('%2F','/');
 const img=s=>W+'Special:Redirect/file/'+encodeURIComponent('Sprite-'+s.replaceAll(' ','_')+'.png');
+const selectImg=s=>W+'Special:Redirect/file/'+encodeURIComponent('Select-'+s.replaceAll(' ','_')+'.png');
 const core=[
 ['Whip','Hollow Heart','Bloody Tear','Antonio','Kezdettől elérhető; Antonio ezzel indul.'],['Magic Wand','Empty Tome','Holy Wand','Imelda','Kezdettől elérhető; Imelda ezzel indul.'],['Knife','Bracer','Thousand Edge','Gennaro','Kezdettől elérhető; Gennaro ezzel indul.'],['Axe','Candelabrador','Death Spiral','Lama','Kezdettől elérhető; Lama ennek a specialistája.'],['Cross','Clover','Heaven Sword','Krochi','Vegyél fel egy Rosary tárgyat; Krochi ezzel indul.'],['King Bible','Spellbinder','Unholy Vespers','Dommario','Kezdettől elérhető; Dommario ezzel indul.'],['Fire Wand','Spinach','Hellfire','Arca','Érd el a 3. szintet a Fire Wanddal; Arca ezzel indul.'],['Garlic','Pummarola','Soul Eater','Poe','Vegyél fel öt Floor Chickent; Poe ezzel indul.'],['Santa Water','Attractorb','La Borra','Suor Clerici','Kezdettől elérhető; Clerici ezzel indul.'],['Runetracer','Armor','NO FUTURE','Pasqualina','Kezdettől elérhető; Pasqualina ezzel indul.'],['Lightning Ring','Duplicator','Thunder Loop','Porta','Győzz le 5000 ellenfelet; Porta ezzel indul.'],['Pentagram','Crown','Gorgeous Moon','Christine','Élj túl 20 percet bármelyik karakterrel.'],['Gatti Amari','Stone Mask','Vicious Hunger','Giovanna','Nyisd ki a koporsót az Inlaid Library pályán.'],['Song of Mana',"Skull O'Maniac",'Mannajja','Poppea','Nyisd ki a koporsót a Dairy Plant pályán.'],['Shadow Pinion','Wings','Valkyrie Turner','Concetta','Nyisd ki a koporsót a Gallo Tower pályán.']];
 const advanced=[['Clock Lancet','MAX Silver Ring + Gold Ring','Infinite Corridor','Bárki','Szerezd meg a Yellow Signt; ezután mindkét gyűrű megjelenik a pályán.'],['Laurel','MAX Metaglio Left + Metaglio Right','Crimson Shroud','Bárki','Szerezd meg a Yellow Signt; ezután mindkét Metaglio megjelenik a pályán.'],['Bracelet','Nincs passzív tárgy','Bi-Bracelet','Gyorunton','Élj túl 15 percet a Boss Rash pályán.'],['Bi-Bracelet','Nincs passzív tárgy','Tri-Bracelet','Gyorunton','Fejleszd maximumra a Bi-Braceletet, majd nyiss ki egy megfelelő ládát.'],['Flames of Misspell',"MAX Torrona's Box",'Ashes of Muspell','Avatar Infernas','Oldd fel a titkos Avatar Infernas karaktert.']];
@@ -222,18 +341,104 @@ const recipes=[...core.map(x=>[...x,'classic']),...advanced.map(x=>[...x,'advanc
 const specials=[
 {type:'Unió',base:['Peachone','Ebony Wings'],result:'Vandalier',note:'Fejleszd maximumra mindkét madarat. Az Ebony Wings akkor oldódik fel, amikor a Peachone eléri a 7. szintet.'},{type:'Unió',base:['Phiera Der Tuphello','Eight The Sparrow'],passive:'Tirajisú',result:'Phieraggi',note:'Fejleszd maximumra mindkét pisztolyt, és legyen nálad a Tirajisú. Pugnala mindkettővel indul, miután kinyitottad a koporsóját a Mad Forestben.'},{type:'Unió',base:['Vento Sacro','Bloody Tear'],result:'Fuwalafuwaloo',note:'Fejleszd maximumra a Vento Sacrót, a Whipből pedig előbb készíts Bloody Teart. Zi’Assunta a Vento Sacróval indul.'},{type:'Ajándék',base:['Victory Sword'],passive:"MAX Torrona's Box",result:'Sole Solution',note:'A Collection teljesítésével oldd fel Queen Sigmát. A Victory Sword az ajándék megszerzése után is megmarad.'},{type:'Ajándék',base:['Candybox'],passive:'Teljesen kiépített felszerelés',result:'Super Candybox II Turbo',note:'Egy evolúciós ládából jelenhet meg, ha már van Candyboxod és teljesen kiépítetted a felszerelésedet.'},{type:'Átalakulás',base:['Bone + Mortaccio'],passive:'Chaos Malachite + 80. szint',result:'Anima of Mortaccio',note:'Találd meg a Chaos Malachite-ot Bat Countryban. Nem kell hozzá láda.'},{type:'Átalakulás',base:['Cherry Bomb + Yatta Cavallo'],passive:'Chaos Rosalia + 80. szint',result:'Yatta Daikarin',note:'Találd meg a Chaos Rosaliát az Astral Stair pályán. Nem kell hozzá láda.'},{type:'Átalakulás',base:['Carréllo + Bianca Ramba'],passive:'Chaos Lazulia + 80. szint',result:'Carrozza!',note:'Találd meg a Chaos Lazuliát a Space 54 pályán. Nem kell hozzá láda.'},{type:'Átalakulás',base:["Celestial Dusting + O'Sole Meeo"],passive:'Chaos Altemanna + 80. szint',result:"Profusione D'Amore",note:'Találd meg a Chaos Altemannát a Tiny Bridge pályán. Nem kell hozzá láda.'}];
 const maps=[['🌿','Il Molise','Bónusz','Oldd fel a Hyper módot bármelyik normál pályán. Tizenöt perces növénykert, ahol minden láda azonnal képes evolúcióra.'],['🌙','Moongolow','Bónusz','Oldd fel a Hyper módot négy normál pályán. Minden szokásos passzív tárgy megtalálható a földön; innen vezet az út a Holy Forbiddenre is.'],['☀️','Holy Forbidden','Rejtett bónusz','Indítsd el a Lunar Eclipse eseményt Moongolowban egy nem titkos karakterrel, éld túl a folyosót, majd vedd fel a Yellow Signt.'],['❄️','Whiteout','Bónusz','Gyűjts össze 20 Orologiont. Itt található az Antidote; 20 perc túlélésével feloldódik a Glass Fandango.'],['🚪','Room 1665','Titkos kihívás','A Secrets menü egyik varázsigéjével elérhető rejtett szoba. Küzdd át magad a számozott termeken, és szerezd meg a Darkassót.'],['♻️','Green Acres','Kihívás','Oldd fel a Hyper módot két normál pályán. Az ellenséghullámokat véletlenszerűen kölcsönzi más pályákról.'],['🦴','The Bone Zone','Kihívás','Oldd fel a Hyper módot három normál pályán. Nincs gyógyító tárgy, csak csontok, pénz és egyre nagyobb veszély.'],['👑','Boss Rash','Kihívás','Oldd fel a Hyper módot mind az öt normál pályán. Tizenöt perces főellenfél-roham; a túlélés feloldja Gyoruntont.'],['🌉','Tiny Bridge','Kihívás','Érd el a 80. szintet az Inverse Gallo Towerben. Keskeny, kelet–nyugati csatatér két ellenséges tábor között.'],['🦇','Bat Country','Kihívás','Érd el a 80. szintet az Inverse Mad Forestben. Főleg denevérek; itt található Mortaccio Chaos Malachite-ja.'],['✨','Astral Stair','Kihívás','Érd el a 80. szintet az Inverse Inlaid Libraryben. Ajtók kötik össze a sávokat; itt van a Chaos Rosalia és a Trisection.'],['🚀','Space 54','Kihívás','Gyűjts össze öt Gold Fingert. Húszperces kozmikus pálya, rajta a Phas3r és a Chaos Lazulia.'],['🧪','Laborratory','Kihívás','Gyűjts össze 33 Rosaryt. Húzz meg karokat, aktiválj csapdákat, és keresd a Santa Javelin korszakának titkait.'],['🛒','Carlo Cart','Kihívás','Okozz 25 120 sebzést a Laborratory Trainnel. Gyors, vízszintes csilletúra.']];
-const dlcs=[['Legacy of the Moonspell','Mt. Moonspell','Silver Wind + MAX Pummarola → Festive Winds; Four Seasons + MAX Spinach és Candelabrador → Godai Shuffle; Summon Night + MAX Duplicator → Echo Night; Mirage Robe + MAX Attractorb → J’Odore; Night Sword + MAX Stone Mask → Muramasa.'],['Tides of the Foscari','Lake és Abyss Foscari','Eskizzibur + MAX Armor → Legionnaire; Flash Arrow + MAX Bracer és Clover → Millionaire; Prismatic Missile + MAX Crown → Luminaire; Shadow Servant + MAX Skull O’Maniac → Ophion. A SpellString, SpellStream és SpellStrike SpellStrommá egyesül.'],['Emergency Meeting','Polus Replica','Minden legénységi fegyver a hozzá tartozó Mini passzív tárggyal párosítható; mindkettőt maximumra kell fejleszteni. Például: Report! + Mini Crewmate → Emergency Meeting.'],['Operation Guns','Neo Galuga','A legtöbb fegyverhez Weapon Power-Up szükséges: Long Gun → Prototype A; Short Gun + Bracer → Prototype B; Spread Shot + Empty Tome → Prototype C; C-U-Laser + Tirajisú → Pronto Beam.'],['Ode to Castlevania','Dracula kastélya','Ez a legnagyobb receptgyűjtemény. A Belmont-fegyverek többsége az alapjáték ismert passzív tárgyait használja, a későbbi fegyverek közül pedig sok uniót alkot.'],['Legacy of the Bloodmoon','Bloodmoon pályák','A 2026-os receptek közé tartozik a Scarlet Needle + MAX Pummarola → Cardinal Rain, valamint elemi uniók, például FireFall + FireBall + FireWall → FireStall.'],['Emerald Diorama','Dioráma-pályák','Nagy fegyverfa képességkatalizátorokkal. Példák: Fleuret + Crystalline Carve → Dress Sword; Town Sword + Swallow Slice → Lordstar.'],['Ante Chamber','Ante Chamber','A 2026-os receptek MAX Outer Saboteurt használnak: Infernolatro → NaneInferno; Gros Michel → Cavendish; Fibonacci Spritz → Royal Flush; Celestial Booster → Negative Space.']];
+const dlcs=[['Legacy of the Moonspell','Mt. Moonspell','Silver Wind + MAX Pummarola → Festive Winds; Four Seasons + MAX Spinach és Candelabrador → Godai Shuffle; Summon Night + MAX Duplicator → Echo Night; Mirage Robe + MAX Attractorb → J’Odore; Night Sword + MAX Stone Mask → Muramasa.','Japán népmesék, yokai szörnyek és egy hatalmas, felfedezésre csábító hegyvidék. Akkor jó választás, ha Heni misztikus hangulatot és látványos elemi fegyvereket szeretne.'],['Tides of the Foscari','Lake és Abyss Foscari','Eskizzibur + MAX Armor → Legionnaire; Flash Arrow + MAX Bracer és Clover → Millionaire; Prismatic Missile + MAX Crown → Luminaire; Shadow Servant + MAX Skull O’Maniac → Ophion. A SpellString, SpellStream és SpellStrike SpellStrommá egyesül.','Varázsiskola, három hős és egy titkokkal teli tó, amely alatt egy sokkal sötétebb világ rejtőzik. Különösen jó, ha a felfedezés és a történetszerű haladás tetszik.'],['Emergency Meeting','Polus Replica','Minden legénységi fegyver a hozzá tartozó Mini passzív tárggyal párosítható; mindkettőt maximumra kell fejleszteni. Például: Report! + Mini Crewmate → Emergency Meeting.','Az Among Us feladatai teljesen őrült fegyverekké változnak. Könnyed, vicces DLC, tele gyanús legénységi tagokkal és ismerős poénokkal.'],['Operation Guns','Neo Galuga','A legtöbb fegyverhez Weapon Power-Up szükséges: Long Gun → Prototype A; Short Gun + Bracer → Prototype B; Spread Shot + Empty Tome → Prototype C; C-U-Laser + Tirajisú → Pronto Beam.','Contra-hangulat, gépfegyverek, rakéták és hatalmas robbanások. Annak való, aki a klasszikus vámpírvadászat helyett néha egy teljes akciófilmet szeretne a képernyőre.'],['Ode to Castlevania','Dracula kastélya','Ez a legnagyobb receptgyűjtemény. A Belmont-fegyverek többsége az alapjáték ismert passzív tárgyait használja, a későbbi fegyverek közül pedig sok uniót alkot.','A nagy gótikus lakoma: egy óriási kastély, Belmontok, vámpírok és elképesztő mennyiségű zene, karakter és fegyver. Ha csak egy nagy DLC kell, ez a legbőségesebb.'],['Legacy of the Bloodmoon','Bloodmoon pályák','A 2026-os receptek közé tartozik a Scarlet Needle + MAX Pummarola → Cardinal Rain, valamint elemi uniók, például FireFall + FireBall + FireWall → FireStall.','Vérholdas, vad és elementáris kaland új fegyver-uniókkal. Azoknak izgalmas, akik már az alapjáték mélyebb rendszereit is magabiztosan használják.'],['Emerald Diorama','Dioráma-pályák','Nagy fegyverfa képességkatalizátorokkal. Példák: Fleuret + Crystalline Carve → Dress Sword; Town Sword + Swallow Slice → Lordstar.','Miniatűr világok és nagy, elágazó fegyverfák. Sok kísérletezést kínál azoknak, akik szeretnek recepteket felfedezni és szokatlan buildeket összerakni.'],['Ante Chamber','Ante Chamber','A 2026-os receptek MAX Outer Saboteurt használnak: Infernolatro → NaneInferno; Gros Michel → Cavendish; Fibonacci Spritz → Royal Flush; Celestial Booster → Negative Space.','Szürreális, szabálytalan előszoba különös fegyverekkel és matematikai tréfákkal. Akkor érdemes belevágni, ha Heni már tényleg furcsább kihívásokra vágyik.']];
+const arcanas=[
+['Game Killer (0)','A fejlődés leáll; a drágakövek robbanó lövedékekké válnak, a ládák pedig legalább három tárgyat adnak.','Győzd le The Endert a Cappella Magnában.','special'],
+['Gemini (I)','A felsorolt fegyverek megkapják a különálló ikerfegyverüket is. Különösen erős a madarakkal, pisztolyokkal és Gatti Amarival.','Érd el az 50. szintet Pugnalával.','offense'],
+['Twilight Requiem (II)','A felsorolt lövedékek lejáratkor felrobbannak; remek a King Bible, Lightning Ring és hasonló fegyverek mellé.','Érd el az 50. szintet Dommarióval.','offense'],
+['Tragic Princess (III)','Mozgás közben csökkenti több irányított és területi fegyver újratöltési idejét.','Érd el az 50. szintet Portával.','offense'],
+['Awake (IV)','Három extra feltámadást ad; minden elhasznált feltámadás tartósan növeli a fő harci értékeket.','Érd el az 50. szintet Krochival.','survival'],
+['Chaos in the Dark Night (V)','A lövedéksebesség folyamatosan hullámzik, és minden szinttel véglegesen is növekszik.','Érd el az 50. szintet Giovannával.','offense'],
+['Sarabande of Healing (VI)','Megduplázza a gyógyítást, a gyógyulás pedig sebzi a közeli ellenfeleket is.','Vedd fel a Randomazzót a Gallo Towerben.','survival'],
+['Iron Blue Will (VII)','A kés-, ostor- és lövedékjellegű fegyverek többször visszapattanhatnak és új célokat találhatnak.','Érd el az 50. szintet Gennaróval.','offense'],
+['Mad Groove (VIII)','Kétpercenként a karakter köré húzza a pályatárgyakat, ládákat, felszedhető tárgyakat és fényforrásokat.','Éld túl a Mad Forest 31. percét.','utility'],
+['Divine Bloodline (IX)','A páncél és a hiányzó életerő visszacsapó sebzéssé válik; megfelelő ölésekkel a Max Health is nő.','Érd el az 50. szintet Clericivel.','survival'],
+['Beginning (X)','A kezdőfegyver és néhány kapcsolódó fegyver több lövedéket kap. Egyszerű, azonnali erősítés.','Érd el az 50. szintet Antonióval.','offense'],
+['Waltz of Pearls (XI)','A Magic Wand-, Cross-, Fire Wand- és Carréllo-család lövedékei többször visszapattannak.','Érd el az 50. szintet Imeldával.','offense'],
+['Out of Bounds (XII)','A megfagyasztott ellenfelek felrobbannak, az Orologionok pedig gyakrabban jelennek meg.','Éld túl a Gallo Tower 31. percét.','control'],
+['Wicked Season (XIII)','A Growth, Luck, Greed és Curse felváltva megduplázódik, és szintenként is tovább növekszik.','Érd el az 50. szintet Christine-nel.','economy'],
+['Jail of Crystal (XIV)','Több gyors lövedék esélyt kap az ellenfelek megfagyasztására.','Érd el az 50. szintet Pasqualinával.','control'],
+['Disco of Gold (XV)','A pénzeszsák Gold Fevert indít, az összegyűjtött arany pedig gyógyít.','Éld túl az Inlaid Library 31. percét.','economy'],
+['Slash (XVI)','Kritikus találatot enged több pengés fegyvernek, és megduplázza az összes kritikus sebzést.','Érd el az 50. szintet Lamával.','offense'],
+['Lost & Found Painting (XVII)','A Duration időszakosan nagyon alacsony és nagyon magas érték között hullámzik, szintenként pedig nő.','Érd el az 50. szintet Poppeával.','offense'],
+['Boogaloo of Illusions (XVIII)','Az Area folyamatosan változik, és minden szinttel tartósan nagyobb lesz.','Érd el az 50. szintet Concettával.','offense'],
+['Heart of Fire (XIX)','Több tüzes és robbanó fegyver becsapódáskor felrobban; sérüléskor a karakter is robbanást kelt.','Érd el az 50. szintet Arcával.','offense'],
+['Silent Old Sanctuary (XX)','Rerollt, Skipet és Banish-t ad; minden üres fegyverhely növeli a sebzést és csökkenti a Cooldownt.','Éld túl a Dairy Plant 31. percét.','special'],
+['Blood Astronomia (XXI)','Több közeli és időalapú fegyver köré külön sebző zónát rajzol, amelyet a Magnet és az Amount erősít.','Érd el az 50. szintet Poe-val.','control']
+].map((a,i)=>({id:'a'+i,name:a[0],effect:a[1],unlock:a[2],group:a[3]}));
+
+const characters=[
+['Antonio Belpaese','Whip','Kezdettől elérhető.','10 szintenként +10% Might, legfeljebb +50%.'],
+['Imelda Belpaese','Magic Wand','Kezdettől feloldva; meg kell vásárolni.','Öt szintenként +10% Growth, legfeljebb +30%.'],
+['Pasqualina Belpaese','Runetracer','Kezdettől feloldva; meg kell vásárolni.','Öt szintenként +10% lövedéksebesség, legfeljebb +30%.'],
+['Gennaro Belpaese','Knife','Kezdettől feloldva; meg kell vásárolni.','Minden fegyverhez állandó +1 Amount.'],
+['Arca Ladonna','Fire Wand','Fejleszd a Fire Wandot 4. szintre.','10 szintenként 5%-kal jobb Cooldown, legfeljebb −15%.'],
+['Porta Ladonna','Lightning Ring','Fejleszd a Lightning Ringet 4. szintre.','Állandó +30% Area és erős ideiglenes kezdő Cooldown.'],
+['Lama Ladonna','Axe','Élj túl 20 percet legalább 10% Curse mellett.','10 szintenként +5% Might, Move Speed és Curse, legfeljebb +20%.'],
+['Poe Ratcho','Garlic','Fejleszd a Garlicot 7. szintre.','Nagyobb felszedési távolság, de 30-cal kevesebb Max Health.'],
+['Suor Clerici','Santa Water','Gyógyíts összesen 1000 HP-t.','Regeneráció és +50 Max Health; az elején óriási ideiglenes Area.'],
+['Dommario','King Bible','Szerezz 5000 aranyat egyetlen körben.','+40% Duration és Speed, cserébe −40% Move Speed.'],
+['Krochi Freetto','Cross','Győzz le összesen 100 000 ellenfelet.','Egy feltámadással indul, majd a 33. szinten még egyet kap.'],
+['Christine Davain','Pentagram','Fejleszd a Pentagramot 7. szintre.','Egy extra szinttel indul; gyorsan építhető Pentagram-specialista.'],
+['Pugnala Provola','Phiera Der Tuphello + Eight The Sparrow','Nyisd ki a Mad Forest koporsóját.','Minden szinten +1% Might; kiválóan skálázódik hosszú körökben.'],
+['Giovanna Grana','Gatti Amari','Nyisd ki az Inlaid Library koporsóját.','Minden szinten +1% Projectile Speed.'],
+['Poppea Pecorina','Song of Mana','Nyisd ki a Dairy Plant koporsóját.','Minden szinten +1% Duration.'],
+['Concetta Caciotta','Shadow Pinion','Nyisd ki a Gallo Tower rejtett koporsóját.','Minden szinten +1% Area.'],
+['Mortaccio','Bone','Győzz le összesen 3000 csontvázat.','20 szintenként több lövedéket kap; a Chaos Malachite átalakíthatja.'],
+['Yatta Cavallo','Cherry Bomb','Győzz le összesen 3000 Lion Headet.','20 szintenként több lövedéket kap; a Chaos Rosalia átalakíthatja.'],
+['Bianca Ramba','Carréllo','Győzz le összesen 3000 Milk Elementalt.','20 szintenként több lövedéket kap; a Chaos Lazulia átalakíthatja.'],
+["O'Sole Meeo",'Celestial Dusting','Győzz le összesen 3000 Dragon Shrimpet.','20 szintenként több lövedéket kap; a Chaos Altemanna átalakíthatja.'],
+['Sir Ambrojoe','La Robba','Győzz le összesen 6000 Stage Killert.','20 szintenként több lövedék, az elején pedig nagy ideiglenes Amount.'],
+['Iguana Gallo Valletto','Clock Lancet','Készíts Infinite Corridort.','Extra szinttel indul, és öt szintenként +10% Growthot kap.'],
+['Divano Thelma','Laurel','Készíts Crimson Shroudot.','Extra szinttel indul, és öt szintenként +1 Armort kap.'],
+["Zi'Assunta Belpaese",'Vento Sacro','Nyisd ki a Cappella Magna koporsóját.','Szintenként +0,5% Might, Speed, Duration és Area.'],
+['Queen Sigma','Victory Sword','Teljesítsd az alapjáték 1.0 Collection gyűjteményét.','Rendkívül erős statokkal és extra Arcana-választásokkal indul.'],
+['Bat Robbert','Pako Battiliar','Evolváld a Pako Battiliart.','Kritikus HP-nál gyógyul és futamonként többször növelheti a Max Health-et.'],
+["Zi'Appunta Belpaese",'Ammo Appalate','Evolváld az Ammo Appalate-et.','Extra robbanó kellékeket találhat, és érintéssel széttöri a fényforrásokat.'],
+['Big Troubler','Unearthly Bolt','Evolváld az Unearthly Boltot.','Az aranypénzek aktiválják a fegyverét és sebzésfogó pajzsként is szolgálnak.'],
+['She-Moon Eeta','Glass Fandango','Élj túl 20 percet Whiteoutban.','Kritikus HP-nál 10 másodpercre megfagyaszt minden ellenfelet.'],
+['Para Kooleo','Penshin Fatcha','Élj túl 20 percet a The Lycaeum pályán.','A kezdőfegyvere nem evolvál, de különösen erős Limit Breaket kap.'],
+['Santa Ladonna','Santa Javelin','Élj túl 20 percet a Laborratory pályán.','Ideiglenes Cooldown-bónusz; kritikus HP-nál Rosaryt aktivál.'],
+['Gazebo','Gaze of Gaea','Élj túl 20 percet a The Coop pályán.','Minden 30 pontnyi túlgyógyítás véletlenszerű statot növel.'],
+['Chula-Reh','Magi-Stone','Élj túl 20 percet Westwoodsban.','Harminc másodpercenként, illetve Rerollo felvételekor újrasorsolja a szerencséjét.'],
+['Space Dude','Phas3r','Élj túl 20 percet a Space 54 pályán.','A Cooldowntól függően időnként kétszer aktiválhatja az összes fegyvert.']
+].map((c,i)=>({id:'c'+i,name:c[0],weapon:c[1],unlock:c[2],power:c[3],group:i<25?'classic':'update'}));
+
+const mechanics=[
+['⚡','PowerUpok','A főmenüben aranyért vásárolt, minden karakterre érvényes állandó fejlesztések. A Might, Cooldown, Amount és Growth általában a leghasznosabb korai befektetés.','PowerUp'],
+['🍀','Luck','Nem csak a ládákat javítja: növeli a kritikus találatok, ritka események és jobb fényforrástárgyak esélyét is.','Luck'],
+['💀','Curse és Charm','A Curse gyorsabbá, erősebbé és népesebbé teszi az ellenfeleket. A Charm főleg a mennyiségüket emeli; több veszély, de több XP és gyorsabb ölési célok.','Curse'],
+['♾','Limit Break','A Great Gospel után, teljes buildnél a szintlépések tovább erősítik a fegyverek Might, Area, Speed és Amount értékeit.','Limit Break'],
+['🔁','Endless mód','A Seventh Trumpet oldja fel. A pálya időciklusa újraindul, az ellenfelek pedig minden körrel veszélyesebbek lesznek.','Endless mode'],
+['🪞','Inverse mód','Gracia’s Mirror után érhető el. A pálya megfordul, az ellenfelek sokkal erősebbek, a Merchant pedig extra Arcana-vásárlást kínál.','Inverse mode'],
+['🔥','Hyper és Hurry','A Hyper gyorsítja a pályát és több aranyat ad; a Hurry kétszeres órasebességgel rövidebb, intenzívebb futamot készít.','Stage Modifiers'],
+['🥚','Golden Egg','Véglegesen, kis véletlenszerű mértékben növeli egy karakter statjait. Nagy mennyiségnél teljesen elszállhat tőle az erőegyensúly.','Golden Egg'],
+['🛒','Merchant','Big Trouser fegyvert és tárgyakat árul. Inverse módban Arcana is vehető nála; Endless módban minden ciklusban visszatér.','Merchant'],
+['🎒','Hat hely és pályatárgyak','Hat passzív hely betöltése után a földön lévő passzív tárgyak még felvehetők, így a normál készletkorlát fölé lehet menni.','Passive item'],
+['🎲','Reroll, Skip, Banish és Seal','A Reroll új kínálatot ad; a Skip kihagyja a választást; a Banish kivesz egy tárgyat az adott körből; a Seal már indulás előtt kizárja.','Reroll'],
+['🎁','Ládák és evolúciós időzítés','A legtöbb pályán a 10:00 után létrejött főellenfél-láda evolvál. A láda születési ideje számít, nem az, hogy mikor nyitod ki.','Treasure Chest'],
+['🃏','Arcana-időzítés','Bekapcsolva az első lapot induláskor választod, a következő Arcana-ládák pedig normál 30 perces pályán 11:00 és 21:00 körül érkeznek.','Arcanas'],
+['📖','Adventures','Önálló, kisebb kampányok saját fejlődéssel és célokkal. Jó mód arra, hogy régi rendszereket új, irányított sorrendben próbálj ki.','Adventures'],
+['👥','Kooperatív játék','A karakterek felváltva szinteznek. Megosztott passzív tárgyaknál az egyik játékos fegyveréhez a másik játékos tárgya is teljesítheti az evolúció feltételét.','Co-op']
+];
+
 function fallback(el){el.onerror=null;el.style.display='none';el.parentElement.insertAdjacentHTML('afterbegin','<span style="font-size:30px">✦</span>')}
 function iconNames(name){return name.replace(/^MAX /,'').split(' + ').map(s=>s.trim()).filter(s=>s&&!/^(Nincs|Teljesen|\d+\.|80\.|szint)/i.test(s))}
 function item(name,result=false){const names=iconNames(name),icons=names.length?names.map(n=>'<img src="'+img(n)+'" alt="'+n+' ikon" title="'+n+'" onerror="fallback(this)">').join(''):'<span style="font-size:30px">—</span>';return '<div class="item '+(result?'result':'')+'"><div class="icons '+(names.length>1?'multi-icons':'')+'">'+icons+'</div><b>'+name+'</b></div>'}
 function card(r){const done=localStorage.getItem('vs-'+r.id)==='1';return '<article class="card '+(done?'done':'')+'" data-id="'+r.id+'" data-group="'+r.group+'" data-search="'+(r.weapon+' '+r.passive+' '+r.result+' '+r.starter+' '+r.acquire).toLowerCase()+'"><span class="badge">'+(r.group==='classic'?'alaprecept':r.group==='advanced'?'haladó':'ingyenes frissítés')+'</span><div class="recipe">'+item(r.weapon)+'<span class="symbol">+</span>'+item(r.passive)+'<span class="symbol">=</span>'+item(r.result,true)+'</div><div class="details"><b>Egyszerű forrás:</b> '+r.starter+'<br><b>Feloldás:</b> '+r.acquire+'<br><b>Fejlesztő tárgy:</b> '+(r.passive==='Nincs passzív tárgy'?'Nincs; fejleszd maximumra a fegyvert, majd nyiss ki egy megfelelő ládát.':'A '+r.passive+' szintlépéskor vagy pályatárgyként vehető fel.')+'</div><div class="card-actions"><a class="learn" href="'+W+slug(r.weapon)+'" target="_blank" rel="noreferrer">Részletek a wikiben ↗</a><button class="check" onclick="toggleDone(\''+r.id+'\')">'+(done?'Megvan ✓':'Megjelölés')+'</button></div></article>'}
 function render(){const q=document.querySelector('#search').value.trim().toLowerCase(),f=document.querySelector('.chip.active').dataset.filter;let n=0;document.querySelector('#recipeGrid').innerHTML=recipes.map(card).join('');document.querySelectorAll('#recipeGrid .card').forEach(c=>{const ok=(!q||c.dataset.search.includes(q))&&(f==='all'||c.dataset.group===f);c.hidden=!ok;if(ok)n++});document.querySelector('#recipeCount').textContent=n+' recept';document.querySelector('#empty').classList.toggle('show',!n)}
 function toggleDone(id){const k='vs-'+id;localStorage.setItem(k,localStorage.getItem(k)==='1'?'0':'1');render()}
+document.querySelector('.nav [data-tab="dlc"]').insertAdjacentHTML('beforebegin','<button data-tab="arcana">🃏 Arcanák</button><button data-tab="characters">🧛 Karakterek</button><button data-tab="mechanics">⚙ Mechanikák</button>');
+document.querySelector('#dlc').insertAdjacentHTML('beforebegin','<section id="arcana" class="panel"><div class="section-head"><div><h2>Arcana-kódex</h2><p>A 22 alap Arcana hatása, feloldása és ideális szerepe.</p></div><span id="arcanaCount" class="count"></span></div><div class="tip"><strong>Hogyan működik?</strong> Szerezd meg a Randomazzót a Gallo Towerben. Normál pályán egy lapot induláskor, továbbiakat pedig az Arcana-ládákból választhatsz. A Darkasso később külön Darkanákat nyit meg.</div><div class="controls codex-controls"><input id="arcanaSearch" class="search" type="search" placeholder="Például: gyógyítás, kritikus vagy Gold Fever…"></div><div class="codex-filters"><button class="codex-filter arcana-filter active" data-arcana="all">Mind</button><button class="codex-filter arcana-filter" data-arcana="offense">Sebzés</button><button class="codex-filter arcana-filter" data-arcana="survival">Túlélés</button><button class="codex-filter arcana-filter" data-arcana="control">Kontroll</button><button class="codex-filter arcana-filter" data-arcana="economy">Fejlődés</button><button class="codex-filter arcana-filter" data-arcana="utility">Hasznosság</button></div><div id="arcanaGrid" class="arcana-grid"></div></section><section id="characters" class="panel"><div class="section-head"><div><h2>Karakterkódex</h2><p>Az alapjáték 34 normál karaktere. A titkos szereplők a Titkok fülön vannak.</p></div><span id="characterCount" class="count"></span></div><input id="characterSearch" class="search" type="search" placeholder="Keress karakterre, kezdőfegyverre vagy feloldásra…"><div id="characterGrid" class="character-grid"></div></section><section id="mechanics" class="panel"><div class="section-head"><div><h2>Mechanikák</h2><p>A játék fontos, de könnyen elnézhető szabályai röviden.</p></div></div><div id="mechanicsGrid" class="mechanics-grid"></div></section>');
 const mainMenu=document.querySelector('.nav');mainMenu.classList.add('menu-grid');document.querySelector('.cover-hero').insertAdjacentElement('afterend',mainMenu);
+function renderArcanas(){const q=document.querySelector('#arcanaSearch').value.trim().toLowerCase(),group=document.querySelector('.arcana-filter.active').dataset.arcana,found=arcanas.filter(a=>(group==='all'||a.group===group)&&(!q||(a.name+' '+a.effect+' '+a.unlock).toLowerCase().includes(q)));document.querySelector('#arcanaGrid').innerHTML=found.map(a=>'<article class="arcana-card"><a class="arcana-art" href="'+W+slug(a.name)+'" target="_blank" rel="noreferrer"><img loading="lazy" src="'+img(a.name)+'" alt="'+a.name+' kártya" onerror="fallback(this)"></a><div><span class="badge">'+({offense:'sebzés',survival:'túlélés',control:'kontroll',economy:'fejlődés',utility:'hasznosság',special:'különleges'}[a.group])+'</span><h3>'+a.name+'</h3><p>'+a.effect+'</p><small><b>Feloldás:</b> '+a.unlock+'</small><a class="learn" href="'+W+slug(a.name)+'" target="_blank" rel="noreferrer">Részletek a wikiben ↗</a></div></article>').join('')||'<div class="tip">Nincs ilyen Arcana.</div>';document.querySelector('#arcanaCount').textContent=found.length+' lap'}
+document.querySelector('#arcanaSearch').oninput=renderArcanas;document.querySelectorAll('.arcana-filter').forEach(b=>b.onclick=()=>{document.querySelectorAll('.arcana-filter').forEach(x=>x.classList.remove('active'));b.classList.add('active');renderArcanas()});
+function renderCharacters(){const q=document.querySelector('#characterSearch').value.trim().toLowerCase(),found=characters.filter(c=>!q||(c.name+' '+c.weapon+' '+c.unlock+' '+c.power).toLowerCase().includes(q));document.querySelector('#characterGrid').innerHTML=found.map(c=>'<article class="character-card"><div class="character-portrait"><img loading="lazy" src="'+selectImg(c.name)+'" alt="'+c.name+'" onerror="fallback(this)"></div><div><span class="badge">'+(c.group==='classic'?'alapjáték':'ingyenes frissítés')+'</span><h3>'+c.name+'</h3><p class="character-weapon">⚔ '+c.weapon+'</p><p><b>Képesség:</b> '+c.power+'</p><p><b>Feloldás:</b> '+c.unlock+'</p><a class="learn" href="'+W+slug(c.name)+'" target="_blank" rel="noreferrer">Karakterlap a wikiben ↗</a></div></article>').join('')||'<div class="tip">Nincs ilyen karakter.</div>';document.querySelector('#characterCount').textContent=found.length+' karakter'}document.querySelector('#characterSearch').oninput=renderCharacters;
+document.querySelector('#mechanicsGrid').innerHTML=mechanics.map(m=>'<details class="mechanic-card"><summary><span class="mechanic-icon">'+m[0]+'</span><span>'+m[1]+'</span><span class="mechanic-open">＋</span></summary><div><p>'+m[2]+'</p><a class="learn" href="'+W+slug(m[3])+'" target="_blank" rel="noreferrer">Bővebben a wikiben ↗</a></div></details>').join('');renderArcanas();renderCharacters();
 document.querySelector('#clearDone').onclick=()=>{recipes.forEach(r=>localStorage.removeItem('vs-'+r.id));render()};document.querySelector('#search').oninput=render;document.querySelectorAll('.chip').forEach(b=>b.onclick=()=>{document.querySelectorAll('.chip').forEach(x=>x.classList.remove('active'));b.classList.add('active');render()});document.querySelectorAll('.nav button').forEach(b=>b.onclick=()=>{document.querySelectorAll('.nav button,.panel').forEach(x=>x.classList.remove('active'));b.classList.add('active');const panel=document.querySelector('#'+b.dataset.tab);panel.classList.add('active');scrollTo({top:panel.offsetTop-18,behavior:'smooth'})});
 document.querySelector('#specialGrid').innerHTML=specials.map(s=>'<article class="card"><span class="badge">'+s.type+'</span>'+(s.passive?'<div class="recipe">'+item(s.base.join(' + '))+'<span class="symbol">+</span>'+item(s.passive)+'<span class="symbol">=</span>'+item(s.result,true)+'</div>':'<div class="recipe multi">'+item(s.base.join(' + '))+'<span class="symbol">→</span>'+item(s.result,true)+'</div>')+'<div class="details">'+s.note+'</div><div class="card-actions"><a class="learn" href="'+W+slug(s.result)+'" target="_blank">Részletek a wikiben ↗</a></div></article>').join('');
 document.querySelector('#mapList').innerHTML=maps.map(m=>'<article class="map"><div class="map-icon">'+m[0]+'</div><div><h3>'+m[1]+'</h3><p>'+m[3]+'</p></div><span class="kind">'+m[2]+'</span></article>').join('');
-document.querySelector('#dlcGrid').innerHTML=dlcs.map(d=>'<article class="dlc"><span class="badge">'+d[1]+'</span><h3>'+d[0]+'</h3><p>'+d[2]+'</p><a href="'+W+'Evolution#'+slug(d[0])+'" target="_blank">A teljes aktuális táblázat megnyitása ↗</a></article>').join('');render();
+document.querySelector('#dlcGrid').innerHTML=dlcs.map(d=>'<article class="dlc"><span class="badge">'+d[1]+'</span><h3>'+d[0]+'</h3><p class="dlc-hook">'+d[3]+'</p><p class="dlc-recipes"><b>Jellegzetes receptek:</b> '+d[2]+'</p><a href="'+W+slug(d[0])+'" target="_blank" rel="noreferrer">A DLC oldala a wikiben ↗</a></article>').join('');render();
 
 // --- Játék közbeni segédfunkciók ---
 const progressSteps=[
@@ -303,7 +508,7 @@ document.querySelector('#stageGuide').innerHTML=stageDetails.map(s=>'<article cl
 const relicGuide=document.querySelector('#relicGuide');document.querySelector('#stageGuide').insertAdjacentHTML('afterend','<div class="section-head relic-heading"><div><h2>Fontos ereklyék</h2><p>Ezek a fejlődési út részei, ezért átkerültek ide a felfedhető titkok közül.</p></div></div>');document.querySelector('.relic-heading').insertAdjacentElement('afterend',relicGuide);document.querySelector('#secretGrid').insertAdjacentHTML('beforebegin','<div class="tip secret-intro"><strong>Itt már minden kártya valódi titok:</strong> először csak egy homályos tippet látsz, a pontos megoldást pedig külön fedheted fel.</div>');
 function renderSecrets(){const done=JSON.parse(localStorage.getItem('vs-secrets')||'[]');document.querySelector('#secretGrid').innerHTML=secretData.map((s,i)=>'<article class="secret-card '+(done.includes(i)?'done':'')+'"><header><h3>'+s.name+'</h3><button class="secret-done" onclick="toggleSecret('+i+')">'+(done.includes(i)?'✓ Megvan':'Megjelölés')+'</button></header><p>„'+s.hint+'”</p><details><summary>Megoldás felfedése</summary>'+s.solution+'</details></article>').join('');document.querySelector('#secretCount').textContent=done.length+'/'+secretData.length+' felfedezve'}function toggleSecret(i){let d=JSON.parse(localStorage.getItem('vs-secrets')||'[]');d=d.includes(i)?d.filter(x=>x!==i):[...d,i];localStorage.setItem('vs-secrets',JSON.stringify(d));renderSecrets()}
 document.querySelector('#deathGuide').innerHTML='<div class="death-build"><h3>Ajánlott magbuild</h3><p><b>Clock Lancet + MAX Silver Ring + MAX Gold Ring → Infinite Corridor</b><br><b>Laurel + MAX Metaglio Left + MAX Metaglio Right → Crimson Shroud</b></p><p>Hasznos mellé: Empty Tome, Tirajisú, Armor és nagy sebzésű evolúciók. A két kulcsevolúcióhoz két külön láda kell.</p></div>'+[['Yellow Sign','Nyisd meg a Moongolowt négy Hyper alap pályával. Nem titkos karakterrel győzd le a különleges főellenfelet, juss a Holy Forbiddenre, és vedd fel a Yellow Signt.'],['Vedd fel mind a hat kulcstárgyat','Egy normál pályán vedd fel a Clock Lancetet és Laurelt, majd a térképen megjelenő két gyűrűt és két Metagliót. A tárgyőrök erősek, ezért ne rohanj mindegyikhez túl korán.'],['Fejlessz maximumra mindent','Clock Lancet 7; Laurel 7; Silver Ring 9; Gold Ring 9; Metaglio Left 9; Metaglio Right 9. A gyűrűk növelik a Curse-t, ezért a futam vége nehezebb lesz.'],['Nyiss ki két megfelelő ládát','Az elsőből készíts Infinite Corridort, a másodikból Crimson Shroudot. A Shroud legfeljebb 10-re korlátozza a bejövő sebzést; a Corridor megfelezi minden ellenség életerejét.'],['Éld túl a 30. percet','A Red Death 30:00-nál érkezik. Maradj mozgásban, hagyd, hogy a Corridor megfagyassza, a Shroud pedig megvédjen és visszaüssön.'],['Várd meg a White Handet','A Reaper öt Golden Egget dob, feloldja a Mask of the Red Death karaktert, majd a White Hand lezárja a futamot. Őt nem lehet legyőzni — ez a siker animációja.']].map((s,i)=>'<article class="death-step"><div class="death-num">'+(i+1)+'</div><div><h3>'+s[0]+'</h3><p>'+s[1]+'</p></div></article>').join('')+'<div class="tip"><strong>Miért működik?</strong> A Crimson Shroud önmagában is képes megölni a Reapert, de lassan. Az Infinite Corridor felezi az életerejét, ezért együtt gyorsak és biztonságosak. A régi Clerici + Runetracer saroktrükk ma már nem ajánlott.</div>';
-function renderDlcs(){let owned;try{owned=JSON.parse(localStorage.getItem('vs-dlcs')||'null')}catch{}if(!owned)owned=dlcs.map(d=>d[0]);document.querySelector('#dlcSettings').innerHTML=dlcs.map((d,i)=>'<button class="dlc-toggle '+(owned.includes(d[0])?'active':'')+'" onclick="toggleDlc('+i+')">'+(owned.includes(d[0])?'✓ ':'')+d[0]+'</button>').join('');document.querySelector('#dlcGrid').innerHTML=dlcs.filter(d=>owned.includes(d[0])).map(d=>'<article class="dlc"><span class="badge">'+d[1]+'</span><h3>'+d[0]+'</h3><p>'+d[2]+'</p><a href="'+W+'Evolution#'+slug(d[0])+'" target="_blank">A teljes aktuális táblázat megnyitása ↗</a></article>').join('')||'<div class="tip">Nincs kiválasztott DLC.</div>'}function toggleDlc(i){const name=dlcs[i][0];let d=JSON.parse(localStorage.getItem('vs-dlcs')||'null')||dlcs.map(x=>x[0]);d=d.includes(name)?d.filter(x=>x!==name):[...d,name];localStorage.setItem('vs-dlcs',JSON.stringify(d));renderDlcs()}
+function renderDlcs(){let owned;try{owned=JSON.parse(localStorage.getItem('vs-dlcs')||'null')}catch{}if(!owned)owned=dlcs.map(d=>d[0]);document.querySelector('#dlcSettings').innerHTML=dlcs.map((d,i)=>'<button class="dlc-toggle '+(owned.includes(d[0])?'active':'')+'" onclick="toggleDlc('+i+')">'+(owned.includes(d[0])?'✓ ':'')+d[0]+'</button>').join('');document.querySelector('#dlcGrid').innerHTML=dlcs.filter(d=>owned.includes(d[0])).map(d=>'<article class="dlc"><span class="badge">'+d[1]+'</span><h3>'+d[0]+'</h3><p class="dlc-hook">'+d[3]+'</p><p class="dlc-recipes"><b>Jellegzetes receptek:</b> '+d[2]+'</p><a href="'+W+slug(d[0])+'" target="_blank" rel="noreferrer">A DLC oldala a wikiben ↗</a></article>').join('')||'<div class="tip">Nincs kiválasztott DLC.</div>'}function toggleDlc(i){const name=dlcs[i][0];let d=JSON.parse(localStorage.getItem('vs-dlcs')||'null')||dlcs.map(x=>x[0]);d=d.includes(name)?d.filter(x=>x!==name):[...d,name];localStorage.setItem('vs-dlcs',JSON.stringify(d));renderDlcs()}
 const challengeCharacters=['Antonio','Imelda','Poe','Pugnala','Poppea','Giovanna','Concetta','Christine','Zi’Assunta','Gyorunton'];function newChallenge(){const pick=a=>a[Math.floor(Math.random()*a.length)],c=pick(challengeCharacters),m=pick(maps),r=pick(recipes),twist=pick(['legfeljebb 4 fegyverrel','Armor nélkül','legalább 20% Curse mellett','Revival nélkül','a pálya egyik földi passzív tárgyával']);document.querySelector('#challengeBox').innerHTML='<h3>Heni mai küldetése</h3><b>'+c+'</b> karakterrel menj a <b>'+m[1]+'</b> pályára, készíts <b>'+r.result+'</b> evolúciót, és teljesítsd <b>'+twist+'</b>.<br><button class="check" onclick="newChallenge()" style="margin-top:10px">Másikat kérek 🎲</button>';document.querySelector('#challengeBox').hidden=false}document.querySelector('#challengeToggle').onclick=newChallenge;
 const compactButton=document.querySelector('#compactToggle');function setCompact(on){document.documentElement.classList.toggle('compact',on);compactButton.classList.toggle('active',on);compactButton.textContent=on?'⚡ Normál nézet':'⚡ Kompakt mód';localStorage.setItem('vs-compact',on?'1':'0')}compactButton.onclick=()=>setCompact(!document.documentElement.classList.contains('compact'));setCompact(localStorage.getItem('vs-compact')==='1');
 let wakeLock=null;document.querySelector('#wakeToggle').onclick=async function(){if(!('wakeLock' in navigator)){this.textContent='☀ Nem támogatott';return}try{if(wakeLock){await wakeLock.release();wakeLock=null;this.classList.remove('active');this.textContent='☀ Kijelző ébren'}else{wakeLock=await navigator.wakeLock.request('screen');this.classList.add('active');this.textContent='☀ Ébren tartva'}}catch{this.textContent='☀ Engedélyezd Safariban'}};
