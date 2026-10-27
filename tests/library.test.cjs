@@ -80,3 +80,16 @@ for(const e of libraryApi.entityRegistry.values()){
 }
 assert.ok(library.includes("closest('button[data-entity],"),'Only entity link buttons route clicks, never the containing dialog');
 console.log('PASS: four categories, '+libraryApi.entityRegistry.size+' entity details, acquisition text, global search, secret protection, original wiki images, safe name matching and detail routing');
+const submenu={hidden:true};
+context.document={querySelector:()=>submenu,querySelectorAll:()=>[],body:{classList:{toggle(){}}}};
+context.priorLibraryOpenPanel=()=>{};
+vm.runInContext(library.slice(library.indexOf('openPanel=function('),library.indexOf("document.querySelector('#codexSubnav').insertAdjacentHTML('beforeend'")),context);
+for(const panel of ['codex','recipes','special','guides','collection']){
+  vm.runInContext('openPanel('+JSON.stringify(panel)+')',context);
+  assert.equal(submenu.hidden,false,'Submenu visible in '+panel);
+}
+for(const panel of ['home','run','profile']){
+  vm.runInContext('openPanel('+JSON.stringify(panel)+')',context);
+  assert.equal(submenu.hidden,true,'Submenu hidden outside codex: '+panel);
+}
+console.log('PASS: codex submenu appears on entry and disappears on exit');
