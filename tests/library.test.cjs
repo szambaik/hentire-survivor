@@ -93,3 +93,16 @@ for(const panel of ['home','run','profile']){
   assert.equal(submenu.hidden,true,'Submenu hidden outside codex: '+panel);
 }
 console.log('PASS: codex submenu appears on entry and disappears on exit');
+const pickerLabel={textContent:'Garlic'},pickerMarkup=[];
+const pickerButton={dataset:{},classList:{contains:c=>c==='picker-item'},querySelector:()=>pickerLabel,before(){},setAttribute(k,v){this[k]=v},insertAdjacentHTML(position,markup){pickerMarkup.push(markup)}};
+const pickerWrapper={classList:{add(){}},append(){},insertAdjacentHTML(position,markup){pickerMarkup.push(markup)}};
+context.document.createElement=()=>pickerWrapper;
+context.pickerRoot={matches:()=>false,querySelectorAll:()=>[pickerButton]};
+vm.runInContext(library.slice(library.indexOf('function decorateSelectionTiles('),library.indexOf('function simplifyRecipeCards(')),context);
+vm.runInContext('decorateSelectionTiles(pickerRoot)',context);
+assert.equal(pickerLabel.textContent,'Garlic','The name remains part of the original select button');
+assert.equal(pickerButton['aria-label'],'Hozzáadás: Garlic');
+assert.equal(pickerButton.dataset.entity,undefined,'Primary select target does not open details');
+assert.ok(pickerMarkup.some(m=>m.includes('class="picker-info"')&&m.includes('data-entity="Garlic"')),'Details has a separate sibling button');
+assert.ok(library.includes("insertAdjacentHTML('beforebegin',searchTrigger)"),'Home search precedes the heading');
+console.log('PASS: picker selects on icon/name, separate details action, search first on home');
