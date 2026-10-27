@@ -1526,6 +1526,8 @@ openPanel=function(id,scroll=true){
   // The old dock scroll container no longer exists, so retain a harmless compatibility node.
   priorLibraryOpenPanel(id,scroll);
   const group=libraryGroups.find(g=>g.id===id||g.panels.includes(id));
+  document.querySelector('#codexSubnav').hidden=!group;
+  document.body.classList.toggle('codex-open',!!group);
   document.querySelectorAll('.library-subnav button').forEach(b=>{const selected=b.dataset.open===group?.id;b.classList.toggle('active',selected);b.setAttribute('aria-current',selected?'page':'false')});
 };
 document.querySelector('#codexSubnav').insertAdjacentHTML('beforeend','<span class="subnav-scroll" hidden></span>');
