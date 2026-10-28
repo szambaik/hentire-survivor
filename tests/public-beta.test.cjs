@@ -1,0 +1,42 @@
+const fs=require('node:fs');
+const path=require('node:path');
+const vm=require('node:vm');
+const assert=require('node:assert/strict');
+const root=path.join(__dirname,'..');
+const html=fs.readFileSync(path.join(root,'index.html'),'utf8');
+const locale=[...html.matchAll(/<script>([\s\S]*?)<\/script>/g)].find(m=>m[1].includes('__POCKET_LOCALE__'))[1];
+function environment(storage={},language='en-US'){
+  const values=new Map(Object.entries(storage));
+  const context=vm.createContext({window:{},navigator:{language},document:{documentElement:{}},localStorage:{getItem:k=>values.get(k)||null,setItem:(k,v)=>values.set(k,v)}});
+  vm.runInContext(locale,context);return {context,values};
+}
+let {context,values}=environment();
+assert.equal(context.window.pgLanguage,'en');
+assert.equal(values.get('pg-language'),'en');
+assert.equal(context.window.pgT('Evolúciók'),'Evolutions');
+assert.equal(context.window.pgT('Garlic'),'Garlic','Canonical game names stay intact');
+assert.equal(context.window.pgT('Hozzáadás: Garlic'),'Add: Garlic');
+assert.equal(context.window.pgT('Fejleszd maximumra ezt a fegyvert: Whip. Legyen nálad ez a fejlesztő tárgy: Hollow Heart. Ezután nyiss ki egy evolúcióra képes ládát.'),'Upgrade this weapon to MAX: Whip. Hold this passive item: Hollow Heart. Then open an eligible evolution chest.');
+const save=JSON.stringify({version:1,unlocked:{weapons:['Garlic'],relics:['Yellow Sign']}});
+({context,values}=environment({'hs-profile-v1':save,'vs-r0':'1','vs-run':'{"weapons":[{"name":"Whip"}]}'},'en-US'));
+assert.equal(context.window.pgLanguage,'hu','Existing visitors retain Hungarian');
+assert.equal(values.get('hs-profile-v1'),save);
+assert.equal(values.get('vs-r0'),'1');
+assert.equal(context.window.pgT('Evolúciók'),'Evolúciók');
+({context}=environment({'hs-profile-v1':save,'pg-language':'en'}));
+assert.equal(context.window.pgLanguage,'en','Explicit preference overrides legacy default');
+({context}=environment({},'hu-HU'));assert.equal(context.window.pgLanguage,'hu');
+for(const personal of ['Heninek','Heni útja','Heni kalandja','Heni túlélőprofilja','Hentire Survivors','data:image/jpeg;base64'])assert.ok(!html.includes(personal));
+assert.ok(html.includes('<h1>Pocket<br>Grimoire</h1>'));
+assert.match(html,/English preview:/,'Unfinished translation is visible, not misrepresented');
+assert.match(html,/revealedPanels=new Set/);
+assert.ok(html.includes("spoilerPanels=['progress','death','secrets']"));
+assert.ok(html.includes("if(!hasProgress&&!pgStorage.get('pg-onboarded'))"));
+assert.ok(html.includes('if(!Array.isArray(owned))owned=null'),'No assumed DLC ownership');
+assert.ok(!/<script src=/.test(html),'Standalone app contains embedded scripts only');
+const manifest=JSON.parse(fs.readFileSync(path.join(root,'manifest.json'),'utf8'));
+assert.equal(manifest.name,'Pocket Grimoire');assert.equal(manifest.start_url,'./');assert.equal(manifest.scope,'./');
+for(const [file,size] of [['apple-touch-icon.png',180],['icon-192.png',192],['icon-512.png',512]]){const png=fs.readFileSync(path.join(root,file));assert.equal(png.readUInt32BE(16),size);assert.equal(png.readUInt32BE(20),size);}
+for(const script of [...html.matchAll(/<script>([\s\S]*?)<\/script>/g)])new vm.Script(script[1]);
+assert.match(fs.readFileSync(path.join(root,'sw.js'),'utf8'),/pocket-grimoire-v16/);
+console.log('PASS: public identity, original install icons, locale persistence, legacy saves, English preview disclosure, spoiler gates, no assumed DLC ownership and standalone syntax');

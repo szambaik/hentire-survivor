@@ -2,7 +2,7 @@ const fs = require('node:fs');
 const vm = require('node:vm');
 const assert = require('node:assert/strict');
 const html = fs.readFileSync(require('node:path').join(__dirname,'../index.html'),'utf8');
-const deployed = [...html.matchAll(/<script>([\s\S]*?)<\/script>/g)].map(m=>m[1]).join('\n');
+const deployed = [...html.matchAll(/<script>([\s\S]*?)<\/script>/g)].map(m=>m[1]).filter(s=>!s.includes('__POCKET_LOCALE__')).join('\n');
 const base = deployed.slice(0,deployed.indexOf('// Connected codex and contextual run advice.'));
 const companion = deployed.slice(deployed.indexOf('// Connected codex and contextual run advice.'),deployed.indexOf('// Connected library:'));
 const context = vm.createContext({});

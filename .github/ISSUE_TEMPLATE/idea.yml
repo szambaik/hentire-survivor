@@ -1,0 +1,11 @@
+name: Idea / Ötlet
+description: Suggest a way to make the companion more useful during a run.
+title: '[Idea] '
+body:
+  - type: textarea
+    id: need
+    attributes:
+      label: What would help you while playing? / Mi segítene játék közben?
+      description: Reports are public. Magyarul is írhatsz.
+    validations:
+      required: true

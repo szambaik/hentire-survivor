@@ -1,0 +1,49 @@
+/* Original public-beta identity. No personal or game artwork in the brand. */
+body::before { background-image:repeating-linear-gradient(90deg,transparent 0 79px,#d9b8750c 80px),repeating-linear-gradient(0deg,transparent 0 79px,#d9b8750c 80px); opacity:.45; }
+body .public-hero { width:100%; max-height:none; height:auto; min-height:0; aspect-ratio:auto; margin:0 0 24px; padding:20px 28px 62px; background:radial-gradient(ellipse at 25% 30%,#65303b88,transparent 70%),linear-gradient(135deg,#2b202b,#14131e); border:1px solid #7e6347; box-shadow:inset 0 0 0 5px #14131e,0 16px 45px #0005; text-align:left; position:relative; }
+.brand-topline { display:flex; justify-content:space-between; align-items:center; gap:12px; }
+.beta-stamp { color:#bca67e; font:10px/1.5 system-ui; letter-spacing:.14em; }
+.brand-topline button,.public-footer button { background:transparent; border:0; color:#dfc894; min-height:44px; padding:8px; font:13px system-ui; text-decoration:underline; text-underline-offset:4px; }
+.brand-lockup { display:flex; align-items:center; gap:22px; margin:8px 0 12px; }
+.brand-book { width:110px; flex-shrink:0; transform:rotate(-8deg); filter:drop-shadow(8px 12px 0 #08091170); }
+.brand-book svg { display:block; width:100%; height:auto; }
+body .public-hero h1 { color:#f6dea3; font:700 clamp(36px,7vw,62px)/.94 var(--pixel); letter-spacing:-.02em; margin:0; text-shadow:3px 3px #100c15; }
+.brand-lockup p { font:12px/1.5 system-ui; color:#cbb8a1; margin:10px 0 0; }
+.brand-promise { font:14px/1.6 system-ui; color:#d7cbb5; margin:18px 0 12px; }
+.language-switch { display:flex; gap:4px; width:fit-content; border:1px solid #725e46; padding:3px; background:#14131e; }
+.language-switch button { min-height:40px; padding:6px 12px; font:13px system-ui; color:#cbbb9f; border:1px solid transparent; background:transparent; }
+.language-switch button[aria-pressed=true] { background:#43333a; border-color:#b3965d; color:#ffebb6; }
+.language-switch small { font-size:9px; color:#b6aa96; }
+.public-footer { margin-top:40px; padding:22px 0 12px; border-top:1px solid #584b37; line-height:1.65; }
+.public-footer b { font:700 20px var(--pixel); color:#cfb276; }
+.public-footer > div { display:flex; flex-wrap:wrap; justify-content:center; gap:12px; align-items:center; }
+.public-footer a { display:inline-flex; min-height:44px; align-items:center; color:#dfc894; }
+.beta-onboarding,.locale-note,.spoiler-gate { padding:18px; margin:14px 0; border:1px solid #887047; background:#24202c; color:#ded0b6; font:14px/1.65 system-ui; }
+.beta-onboarding h3,.spoiler-gate h3 { margin:0 0 8px; color:#eed491; }
+.beta-onboarding p,.spoiler-gate p { margin:8px 0 14px; }
+.beta-onboarding > div,.spoiler-gate > div { display:flex; flex-wrap:wrap; gap:10px; }
+.beta-onboarding button,.spoiler-gate button,.about-content button { min-height:44px; padding:10px 14px; border:1px solid #b4965a; background:#342733; color:#f5dda3; font:700 15px var(--pixel); }
+.beta-onboarding .quiet { border-color:transparent; background:transparent; color:#c4b8a1; }
+.locale-note { font-size:12px; border-color:#686044; background:#24251f; }
+.about-content { overflow:auto; padding:24px; font:14px/1.8 system-ui; }
+.about-content section { padding:0 0 18px; margin-bottom:18px; border-bottom:1px solid #574834; }
+.about-content h3 { color:#e6c98c; font:700 24px var(--pixel); margin:0 0 10px; }
+.about-content a { color:#f1d08e; text-underline-offset:3px; }
+.about-content p { margin:10px 0; }
+.spoiler-setting { display:flex; align-items:center; gap:14px; cursor:pointer; min-height:54px; }
+.spoiler-setting input { width:22px; height:22px; accent-color:#b59052; flex-shrink:0; }
+.spoiler-gate ~ .spoiler-content[hidden],.spoiler-content[hidden] { display:none!important; }
+.feedback-link { display:inline-flex; padding:8px 0; min-height:44px; align-items:center; }
+@media(max-width:600px) {
+  body .public-hero { padding:10px 18px 48px; margin-top:8px; }
+  .brand-book { width:76px; }
+  .brand-lockup { gap:12px; margin:4px 0 8px; }
+  body .public-hero h1 { font-size:40px; }
+  .brand-promise { margin:12px 0 10px; font-size:12px; }
+  .brand-topline button { font-size:12px; }
+  .beta-stamp { font-size:9px; letter-spacing:.09em; }
+  .brand-lockup p { font-size:11px; }
+  body #home > .library-search-trigger { margin-top:-45px; min-height:72px; }
+  .about-content { padding:18px 16px calc(24px + env(safe-area-inset-bottom)); }
+}
+@media(prefers-reduced-motion:reduce) { html { scroll-behavior:auto; } * { transition:none!important; animation:none!important; } }
